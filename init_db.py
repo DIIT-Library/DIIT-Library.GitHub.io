@@ -74,7 +74,7 @@ try:
             transaction_id INT AUTO_INCREMENT PRIMARY KEY,
             book_id INT NOT NULL,
             member_id INT NOT NULL,
-            issue_date DATE DEFAULT CURDATE(),
+            issue_date DATE DEFAULT CURRENT_DATE,
             due_date DATE NOT NULL,
             return_date DATE,
             fine_amount INT DEFAULT 0,
