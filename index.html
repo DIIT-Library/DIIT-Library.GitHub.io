@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library - Book Collection</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="navbar-brand"><i class="fas fa-book-open"></i> LibraryMS</div>
+        <div class="search-area">
+            <div class="search-box-wrap">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="searchInput" class="search-box"
+                    placeholder="Search books by title, author, category...">
+                <button id="clearBtn" class="clear-btn" title="Clear search" hidden>
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <select id="categorySelect" class="category-select">
+                <option value="">All categories</option>
+            </select>
+        </div>
+    </nav>
+
+    <header class="hero" id="hero">
+        <h1><i class="fas fa-book-open"></i> Our Book Collection</h1>
+        <p id="heroSubtitle">Loading books…</p>
+    </header>
+
+    <main class="container">
+        <div id="statusMessage" class="status-message" hidden></div>
+
+        <div id="booksGrid" class="books-grid"></div>
+
+        <div id="emptyState" class="empty-state" hidden>
+            <i class="fas fa-search"></i>
+            <h3>No books found</h3>
+            <p>Try a different search term or category.</p>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>Powered by LibraryMS</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
