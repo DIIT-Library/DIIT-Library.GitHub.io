@@ -15,85 +15,6 @@ app.config['MYSQL_PORT'] = int(os.environ.get('MYSQLPORT', 3306))
 
 mysql = MySQL(app)
 
-# ==================== DATABASE INITIALIZATION ====================
-def init_database():
-    """Initialize database tables if they don't exist"""
-    try:
-        cur = mysql.connection.cursor()
-        
-        # Create users table
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS users (
-                user_id INT AUTO_INCREMENT PRIMARY KEY,
-                username VARCHAR(50) UNIQUE NOT NULL,
-                password VARCHAR(255) NOT NULL,
-                role VARCHAR(50) DEFAULT 'staff',
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-        """)
-        
-        # Create books table
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS books (
-                book_id INT AUTO_INCREMENT PRIMARY KEY,
-                title VARCHAR(255) NOT NULL,
-                author VARCHAR(255) NOT NULL,
-                isbn VARCHAR(20) UNIQUE,
-                category VARCHAR(100),
-                total_copies INT DEFAULT 1,
-                available_copies INT DEFAULT 1,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-        """)
-        
-        # Create members table
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS members (
-                member_id INT AUTO_INCREMENT PRIMARY KEY,
-                name VARCHAR(255) NOT NULL,
-                email VARCHAR(100),
-                phone VARCHAR(20),
-                address TEXT,
-                member_code VARCHAR(20) UNIQUE,
-                membership_expire DATE,
-                status VARCHAR(50) DEFAULT 'active',
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-        """)
-        
-        # Create transactions table
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS transactions (
-                transaction_id INT AUTO_INCREMENT PRIMARY KEY,
-                book_id INT NOT NULL,
-                member_id INT NOT NULL,
-                issue_date DATE DEFAULT CURDATE(),
-                due_date DATE NOT NULL,
-                return_date DATE,
-                fine_amount INT DEFAULT 0,
-                status VARCHAR(50) DEFAULT 'issued',
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (book_id) REFERENCES books(book_id),
-                FOREIGN KEY (member_id) REFERENCES members(member_id)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-        """)
-        
-        # Insert default admin user if not exists
-        cur.execute("SELECT COUNT(*) FROM users WHERE username = 'admin'")
-        if cur.fetchone()[0] == 0:
-            cur.execute("INSERT INTO users (username, password, role) VALUES (%s, %s, %s)",
-                       ('admin', 'admin123', 'admin'))
-        
-        mysql.connection.commit()
-        cur.close()
-        print("✓ Database tables initialized successfully")
-    except Exception as e:
-        print(f"Database initialization error: {e}")
-
-# Initialize database when app starts
-with app.app_context():
-    init_database()
-
 # ==================== LOGIN ====================
 @app.route('/', methods=['GET', 'POST'])
 def login():
@@ -368,4 +289,3 @@ def search_members_api():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
