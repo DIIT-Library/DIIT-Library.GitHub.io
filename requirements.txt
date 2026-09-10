@@ -1,5 +1,0 @@
-flask
-flask-mysqldb
-bcrypt
-gunicorn
-mysqlclient
